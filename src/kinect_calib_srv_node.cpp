@@ -16,8 +16,8 @@
 
 #include<signal.h>
 
-#include<kinect_calibration/Kinect3D.h>
-#include<kinect_calibration/srv_calib_test.h>
+#include<kinect_calib_srv/Kinect3D.h>
+#include<kinect_calib_srv/srv_calib_test.h>
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 #define thresh 10
@@ -214,7 +214,7 @@ void points(const sensor_msgs::PointCloud2::ConstPtr& msg)
 }
 
 
-bool get3Dpoint_callback(  kinect_calibration::Kinect3D::Request &req, kinect_calibration::Kinect3D::Response &res)
+bool get3Dpoint_callback(kinect_calib_srv::Kinect3D::Request &req, kinect_calib_srv::Kinect3D::Response &res)
 {
     std::cout << "Entered kinect 3D service\n";
 
@@ -290,7 +290,7 @@ static void mouseAction( int event, int x, int y, int flags, void* data )
 
 }
 
-bool callback_calib_test(kinect_calibration::srv_calib_test::Request &req, kinect_calibration::srv_calib_test::Response &res)
+bool callback_calib_test(kinect_calib_srv::srv_calib_test::Request &req, kinect_calib_srv::srv_calib_test::Response &res)
 {
     std::cout << "IN TEST POINT SERVICE\n";
 
