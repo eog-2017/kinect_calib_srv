@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 ## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(PCL REQUIRED)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -120,6 +120,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -133,7 +134,8 @@ include_directories(
 # add_dependencies(kinect_calib_srv ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
- add_executable(kinect_calib_srv_node src/kinect_calib_srv_node.cpp)
+add_executable(kinect_calib_srv_node src/kinect_calib_srv_node.cpp)
+ add_executable(kinect_calib_srv_test src/kinect_calib_srv_test.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -141,6 +143,10 @@ include_directories(
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(kinect_calib_srv_node
+   ${catkin_LIBRARIES}
+   ${PCL_LIBRARIES}
+ )
+ target_link_libraries(kinect_calib_srv_test
    ${catkin_LIBRARIES}
  )
 
