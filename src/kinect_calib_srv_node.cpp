@@ -60,7 +60,10 @@ bool service_called = false;
 bool test_service_called = false;
 bool mouse_event_processed = false;
 
-bool visualize = false;
+/*
+ * Use this to get debug information for the cloud
+ */
+bool visualize = true;
 
 void signal_function(int sig)
 {
@@ -311,7 +314,8 @@ static void mouseAction( int event, int x, int y, int flags, void* data)
                 ne.setSearchMethod(tree);
 
                 pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
-                ne.setKSearch(50);
+                //ne.setKSearch(50);
+                ne.setRadiusSearch(0.03);
 
                 ne.compute(*normals);
                 pcl::Normal normal = normals->at(ioi);
@@ -341,7 +345,7 @@ static void mouseAction( int event, int x, int y, int flags, void* data)
                 std::cout<< "x= " << my_point.real[0] <<", y= " << my_point.real[1] <<
                             ", z= " << my_point.real[2] << std::endl;
                 std::cout<< "nx = " << normal.normal[0] << ", ny = " << normal.normal[1] << ", nz = " << normal.normal[2];
-                std::cout<< "ax = " << E(0,0) << ", ay = " << E(1,0) << ", az = " << E(2,0);
+                std::cout<< "\n ax = " << E(0,0) << ", ay = " << E(1,0) << ", az = " << E(2,0);
 
                 my_data->push_back(my_point);
                 my_data->push_back(my_normal);
@@ -353,18 +357,29 @@ static void mouseAction( int event, int x, int y, int flags, void* data)
                     viewer->addCoordinateSystem(1.0);
                     viewer->initCameraParameters();
 
-                    pcl::PointXYZ axis, norm;
-                    axis.x = my_axis.real[0];
-                    axis.y = my_axis.real[1];
-                    axis.z = my_axis.real[2];
+                    pcl::PointXYZRGB point, axis, norm;
 
-                    norm.x = my_normal.real[0];
-                    norm.y = my_normal.real[1];
-                    norm.z = my_normal.real[2];
+                    point.x = my_point.real[0];
+                    point.y = my_point.real[1];
+                    point.z = my_point.real[2];
 
-                    viewer->addPointCloud<pcl::PointXYZRGB>(no_nan_cld, "debug_cloud");
-                    viewer->addArrow<pcl::PointXYZRGB, pcl::PointXYZ>(no_nan_cld->at(ioi), norm, 0, 255, 0, true, "normal");
-                    viewer->addArrow<pcl::PointXYZRGB, pcl::PointXYZ>(no_nan_cld->at(ioi), axis, 0, 0, 255, true, "axis");
+                    axis.x = point.x + my_axis.real[0];
+                    axis.y = point.y + my_axis.real[1];
+                    axis.z = point.z + my_axis.real[2];
+
+                    norm.x = point.x + my_normal.real[0];
+                    norm.y = point.y + my_normal.real[1];
+                    norm.z = point.z + my_normal.real[2];
+
+                    norm.r = 0;
+                    norm.g = 255;
+                    norm.b = 0;
+
+
+                    viewer->addPointCloud(no_nan_cld, "debug_cloud");
+                    viewer->addArrow(point, norm, 0, 1.0, 0, true, "normal");
+                    viewer->addArrow(point, axis, 0, 0, 1.0, true, "axis");
+
 
                     viewer->spin();
                 }
@@ -396,7 +411,7 @@ bool callback_calib_test(kinect_calib_srv::srv_calib_test::Request &req, kinect_
 
     int j = 0;
     point_3d point;
-    for(int i=0;i<9;i++) {
+    for(int i=0; i<9; i++) {
         if (i % 3 == 0){
             point = points[j++];
         }
@@ -404,7 +419,7 @@ bool callback_calib_test(kinect_calib_srv::srv_calib_test::Request &req, kinect_
     }
 
 
-    std::cout << "EXITING TEST POINT SERVICE\n";
+    std::cout << "\n EXITING TEST POINT SERVICE\n\n";
 
     return true;
 }

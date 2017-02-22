@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
         ROS_INFO("Service called successfully...");
 
         ROS_INFO("Point := (%f, %f, %f)", srv.response.Point_3D.data[0], srv.response.Point_3D.data[1], srv.response.Point_3D.data[2]);
-        ROS_INFO("Normal := (%f, %f, %f)", srv.response.Point_3D.data[3], srv.response.Point_3D.data[4], srv.response.Point_3D.data[6]);
+        ROS_INFO("Normal := (%f, %f, %f)", srv.response.Point_3D.data[3], srv.response.Point_3D.data[4], srv.response.Point_3D.data[5]);
         ROS_INFO("Major Axis := (%f, %f, %f)", srv.response.Point_3D.data[6], srv.response.Point_3D.data[7], srv.response.Point_3D.data[8]);
     }
 
